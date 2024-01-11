@@ -206,7 +206,7 @@ def mine_block():
     # add a transaction to the list of transactions
     blockchain.add_transaction(
         patient = node_address, 
-        doctor = 'Hadelin',
+        doctor = 'Yourself',
         permission = 1
     )
     
@@ -332,29 +332,4 @@ def replace_chain():
     return jsonify(response), 200
         
 # Running the app
-app.run(host = '0.0.0.0', port = 5001)
-
-
-
-# run the app in the terminal: python3 hadcoin.py
-# cd - Blockchain_2 % python3
-# Python 3.12.1 (v3.12.1:2305ca5144, Dec  7 2023, 17:23:38) [Clang 13.0.0 (clang-1300.0.29.30)] on darwin
-# Type "help", "copyright", "credits" or "license" for more information.
-# >>> from urllib.parse import urlparse
-# >>> address = 'http://127.0.0.1:5001'
-# >>> parsed_url = urlparse(address)
-# >>> parsed_url
-# ParseResult(scheme='http', netloc='127.0.0.1:5001', path='', params='', query='', fragment='')
-# >>> parsed_url.netloc
-# '127.0.0.1:5001'
-# >>> node = parsed_url.netloc
-# >>> node
-# '127.0.0.1:5001'
-# >>> 
-# >>> node
-# '127.0.0.1:5001'
-# >>> f'http://{node}/get_chain'
-# 'http://127.0.0.1:5001/get_chain'
-# >>> json = {    
-# ...     "nodes": ["http://127.0.0.1:5002", "http://127.0.0.1:5003", "http://127.0.0.1:5004"]
-# ... }
+app.run(host = '0.0.0.0', port = 5002)
