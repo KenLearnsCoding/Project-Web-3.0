@@ -67,7 +67,11 @@ function HomePage() {
             console.log('this is token ' +token);
 
             // Use this line to differentiae the unique token for the metamask acc using in the browser.
+            // the tokens will be hold in the localStorage of the inspector
             localStorage.setItem(address, token.token);
+
+            // Get direction to the protected-route page
+            window.location.href= './protected-route'
 
         } catch (error) {
             console.error(error);
@@ -84,7 +88,7 @@ function HomePage() {
                 <br />
             </div>
             <Link href="/signup">
-                <button className={styles.btn}>Sign Up</button>
+                <button className={styles.btn}>Signup</button>
             </Link>
         </div>
     );
