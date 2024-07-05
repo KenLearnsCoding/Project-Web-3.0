@@ -1,46 +1,52 @@
-const hexToBinary = require('hex-to-binary');
-const { GENESIS_DATA, MINE_RATE } = require('../config');
-const { cryptoHash } = require('../util');
+const SHA256 = require('crypto-js/sha256');
+const Transaction = require('./transaction');
 
 class Block {
-  constructor({ timestamp, lastHash, hash, data, nonce, difficulty }) {
-    this.timestamp = timestamp;
-    this.lastHash = lastHash;
-    this.hash = hash;
-    this.data = data;
-    this.nonce = nonce;
-    this.difficulty = difficulty; // used to adjust the difficulty of the proof of work algorithm
-  }
+    constructor(timestamp, transactions = [], previousHash = '') {
+        this.timestamp = timestamp;
+        this.transactions = transactions;
+        this.previousHash = previousHash;
+        this.hash = this.calculateHash();
+        this.nonce = 0;
+        this.maxBlockSize = 2; // Maximum transactions per block
+    }
 
-  static genesis() {
-    return new this(GENESIS_DATA); // return a new instance of the Block class with the GENESIS_DATA
-  }
+    calculateHash() {
+        return SHA256(this.previousHash + this.timestamp + JSON.stringify(this.transactions) + this.nonce).toString();
+    }
 
-  static mineBlock({ lastBlock, data }) {
-    const lastHash = lastBlock.hash;
-    let hash, timestamp;
-    let { difficulty } = lastBlock;
-    let nonce = 0;
+    mineBlock(difficulty) {
+        while (true) {
+            this.nonce++;
+            this.hash = this.calculateHash();
+            if (this.hash.substring(0, difficulty) === Array(difficulty + 1).join('0')) {
+                console.log('Block mined:', this.hash);
+                break;
+            }
+        }
+    }
 
-    do {
-      nonce++;
-      timestamp = Date.now();
-      difficulty = Block.adjustDifficulty({ originalBlock: lastBlock, timestamp });
-      hash = cryptoHash(timestamp, lastHash, data, nonce, difficulty);
-    } while (hexToBinary(hash).substring(0, difficulty) !== '0'.repeat(difficulty));
+    addTransaction(transaction) {
+        if (this.transactions.length < this.maxBlockSize) {
+            this.transactions.push(transaction);
+            if (this.transactions.length === this.maxBlockSize) {
+                this.mineBlock(difficulty); // Automatically mine the block when maximum transactions are reached
+            }
+        } else {
+            console.log('Block is full. Creating a new block instance...');
+            const newBlock = new Block(Date.now(), [transaction], this.hash);
+            return newBlock;
+        }
+    }
 
-    return new this({ timestamp, lastHash, data, difficulty, nonce, hash });
-  }
-
-  static adjustDifficulty({ originalBlock, timestamp }) {
-    const { difficulty } = originalBlock;
-
-    if (difficulty < 1) return 1;
-
-    if ((timestamp - originalBlock.timestamp) > MINE_RATE) return difficulty - 1;
-
-    return difficulty + 1;
-  }
+    hasValidTransactions() {
+        for (const tx of this.transactions) {
+            if (!tx.isValid()) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
 
 module.exports = Block;
