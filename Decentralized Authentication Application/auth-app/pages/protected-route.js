@@ -1,7 +1,7 @@
-import withAuth from '../utils/withAuth'
+import withAuth from '@/utils/withAuth';
 
 function ProtectedRoute() {
-    return <h1>This is the protected Route</h1>
+  return <h1>This is a protected route.</h1>;
 }
 
-export default withAuth(ProtectedRoute) ;
+export default withAuth(ProtectedRoute);

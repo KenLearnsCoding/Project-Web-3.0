@@ -1,8 +1,7 @@
 import { ethers } from 'ethers';
-
 import jwt from 'jsonwebtoken';
 
-const secretKey = "mySecretKey";
+const secretKey = process.env.secretKey;
 
 async function handler(req, res) {
     // get 3 values from the post method
@@ -18,10 +17,12 @@ async function handler(req, res) {
         return res.status(401).json({ error: 'Invalid Signature' });
     }
  
+    // This token can be used for authenticating subsequent requests by the client, ensuring that the request is coming from an authenticated source within the specified expiry time.
     const token = jwt.sign({ address }, secretKey, { expiresIn: '25s' });
-    console.log('Token '+token);
+    console.log('Token from Early '+token);
     
-    res.status(200).json({ token });
+    // Send the JWT token to the frontend
+    res.status(200).json({token});
 }
 
 export default handler;

@@ -49,11 +49,11 @@ function HomePage() {
             const nonce = resp.message;
             console.log('this is the nonce '+nonce);
             
-            // the purpose is to keep the token for using the login, it will avoid logining again in the metamask multiple time. 
+            // the purpose is to keep the token for using the login, it will avoid loginning again in the metamask multiple time. 
             // the token is saved on the protected browser. 
             const signedMessage = await signer.signMessage(nonce);
             console.log('this is signMessage ' +signedMessage);
-            const data = {signedMessage, nonce, address};
+            const data = { signedMessage, nonce, address };
             const authResponse = await fetch('/api/login', {
                 method: 'POST', 
                 headers: {
@@ -64,14 +64,15 @@ function HomePage() {
             });
 
             let token = await authResponse.json();
-            console.log('this is token ' +token);
+            // const { token } = await response.json();
+            console.log('this is token from mondoDB ' +token);
 
             // Use this line to differentiae the unique token for the metamask acc using in the browser.
             // the tokens will be hold in the localStorage of the inspector
             localStorage.setItem(address, token.token);
 
             // Get direction to the protected-route page
-            window.location.href= './protected-route'
+            window.location.href = '/protected-route'
 
         } catch (error) {
             console.error(error);

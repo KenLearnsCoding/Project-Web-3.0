@@ -27,6 +27,7 @@ async function handler (req, res) {
             // Create a new user with the name, email, and blockchain address
             // also provide enough parameters to avoid the error
             const newUser = new User({name, email, blockchainAddress});
+            
 
             // Save the new user to the database
             await newUser.save();
