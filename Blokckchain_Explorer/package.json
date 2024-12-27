@@ -1,7 +1,6 @@
 {
   "name": "blokckchain_explorer",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,6 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.21.2"
-  }
+    "@coinbase/coinbase-sdk": "^0.13.0",
+    "express": "^4.21.2",
+    "typescript": "^5.7.2"
+  },
+  "description": "",
+  "type": "module"
 }
